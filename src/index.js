@@ -52,6 +52,8 @@ class Game extends React.Component {
       }],
       xIsNext: true,
       stepNumber: 0,
+      player1: ['X','X'],
+      player2: ['O','O'],
     }
   }
 
@@ -96,22 +98,37 @@ class Game extends React.Component {
 
     let status;
     if(winner){
-      status = 'Winner: ' + winner;
+      let nameOfWinner = this.state.player1[1] === winner ? this.state.player1 : this.state.player2
+      status = 'Winner: ' + nameOfWinner[0] + '(' + nameOfWinner[1] + ')';
     } else {
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      status = 'Next player: ' + (this.state.xIsNext ? this.state.player1[0] : this.state.player2[0]);
     }
 
     return (
       <div className="game">
-        <div className="game-board">
-          <Board
-              squares={current.squares}
-              onClick={(i) => this.handleClick(i, current)}
-            />
+        <div className="userName">
+          <label>
+            Igralec 'X': 
+            <input type="text" onChange={event => this.setState({player1: [event.target.value, 'X']})}></input>
+          </label>
+          <label>
+            Igralec 'O': 
+            <input type="text" onChange={event => this.setState({player2: [event.target.value, 'O']})}></input>
+          </label>
         </div>
-        <div className="game-info">
-          <div>{status}</div>
-          <ol>{moves}</ol>
+
+        <div className="holder">
+          <div className="game-board">
+            <Board
+                squares={current.squares}
+                onClick={(i) => this.handleClick(i, current)}
+            />
+          </div>
+
+          <div className="game-info">
+            <div>{status}</div>
+            <ol>{moves}</ol>
+          </div>  
         </div>
       </div>
     );
